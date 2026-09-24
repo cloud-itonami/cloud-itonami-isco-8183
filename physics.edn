@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a plant scheduling/logistics coordination robot
+;; does crew scheduling, production/inventory logging and packaging-materials
+;; and consumables supply for a packing, bottling and labelling crew; it never
+;; runs the packaging line. Its physical work is consumables logistics:
+;; mounting label reels on the labeller spindle, and bringing tall, light
+;; pallets of empty bottles to the depalletiser.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-8183"
+ :cases
+ [{:id :label-reel-to-spindle
+   :kind :manipulator
+   :procedure "arm lifts a label reel from the consumables cart onto the labeller unwind spindle"
+   :params {:l1-m 0.45 :l2-m 0.40 :m1-kg 3.5 :m2-kg 2.5
+            :from [0.55 0.05] :to [0.35 0.55] :duration-s 2.0 :steps 400}
+   :sweep {:param :payload-kg :values [2.0 3.0 4.0 5.0 6.0 8.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 60.0 :basis "estimate: continuous shoulder torque of a light collaborative arm (~5 kg class)"}
+   :boundary {:lo 0.1 :hi 20.0}}
+  {:id :empty-bottle-pallet
+   :kind :transport
+   :procedure "pallet AMR brings a tall shrink-wrapped pallet of empty bottles to the depalletiser infeed and must be able to stop for a person"
+   :params {:mass-kg 150.0 :payload-kg 200.0 :distance-m 40.0 :v-max-mps 1.0 :a-max-mps2 0.4
+            :drive-force-n 600.0 :crr 0.015 :cog-height-m 0.30 :payload-cog-height-m 1.20
+            :support-half-length-m 0.40 :max-time-s 600.0}
+   :sweep {:param :brake-decel-mps2 :values [0.5 1.0 1.5 2.0 2.5]}
+   :quantity :min-tipover-margin
+   :limit {:min 0.5 :basis "estimate: keep at least half the static stability margin under braking for a tall, light load"}
+   :boundary {:lo 0.3 :hi 4.0}}]}
