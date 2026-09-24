@@ -1,5 +1,5 @@
 (ns packcoord.actor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [packcoord.actor :as actor]
             [packcoord.store :as store]))
 
