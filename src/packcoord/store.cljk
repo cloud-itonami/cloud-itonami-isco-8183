@@ -1,7 +1,7 @@
 (ns packcoord.store
   "SSoT for the ISCO-08 8183 packing, bottling and labelling machine
   operators plant scheduling/logistics coordination actor (itonami
-  actor pattern, ADR-2607121000 / CLAUDE.md Actors section; README's
+  actor pattern, ADR-2607121000 / AGENTS.md Actors section; README's
   'Robotics premise' — a plant scheduling/logistics coordination robot
   performs crew scheduling, production-run/inventory/progress-record
   logging and packaging-materials/consumables supply-order
